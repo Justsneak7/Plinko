@@ -19,7 +19,7 @@ function setup() {
   createCanvas(800, 735);
   engine = Engine.create();
   world = engine.world;
-  ground = new Base(width/2,height,width,20);
+  ground = new Ground(width/2,height,width,20);
 
 
    for (var k = 0; k <=width; k = k + 80) {
