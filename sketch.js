@@ -1,27 +1,26 @@
 const Engine = Matter.Engine
 const World = Matter.World
-const Events = Matter.Events
-const Bodies = Matter.Bodies
-
-var particles;
+const  Events = Matter.Events
+const Bodies = Matter.Bodies;
+ 
+var particles = [];
 var plinkos = [];
 var divisions = [];
+
+var particleOb;
+
+var gameState = "start";
+
+var turn = 0;
+
 var divisionHeight=300;
 var score =0;
-var gameState = 'start';
-var turns = 0;
-var particle;
-var count = 0;
-var score1 = false;
-var score2 = false;
-var score3 = false;
 function setup() {
   createCanvas(800, 800);
   engine = Engine.create();
   world = engine.world;
-  
-  ground = new Ground(width/2, height, width, 20);
-  
+  ground = new Ground(width/2,height,width,20);
+
 
    for (var k = 0; k <=width; k = k + 80) {
      divisions.push(new Divisions(k, height-divisionHeight/2, 10, divisionHeight));
@@ -53,85 +52,79 @@ function setup() {
     }
 
     
-    
+
     
 }
  
 
-var particle;
+
 function draw() {
   background("black");
-  textSize(20);
-  if(gameState != "end"){
-    textSize(20);
-    fill("white");
-    text("Score: " + score, 675,40);
-    if (particle != null) {
-      particle.display();
-      if(particle.body.position.y > 760 && particle.body.position.x > 0 && particle.body.position.x < 800){
-        if(particle.body.position.x <= 240){
-          score += 500;
-          particle = null;
-        }
-        else if(particle.body.position.x < 600){
-          score += 100;
-          particle = null;
-        }
-        else{
-          score += 200;
-          particle = null;
-        }
-        count ++;
-      }
-    }
-
-    if(count >= 5) {
-      gameState = "end";
-    }
-  }
-  else{
-    textSize(60);
-    fill("red")
-    text("GAME OVER",200,250);
-    textSize(30);
-    fill("white");
-    text("Your Score: " + score, 250,350);
-  }
- //text("Score : "+score,20,30);
+  textSize(20)
+ text("Score : "+score,20,30);
+ text("500", 20,550);
+ text("500",100,550);
+ text("500",180,550);
+ text("500",260,550);
+ text("100",340,550);
+ text("100",420,550);
+ text("100",500,550);
+ text("200",580,550);
+ text("200",660,550);
+ text("200",740,550);
+ text("Turns: "+turn,200,30);
   Engine.update(engine);
  
- 
+  for (var k = 0; k < divisions.length; k++) {
+     
+    divisions[k].display();
+  }
    for (var i = 0; i < plinkos.length; i++) {
      
      plinkos[i].display();
      
    }
-   
-   for (var k = 0; k < divisions.length; k++) {
-     
-     divisions[k].display();
-   }
-   console.log(score);
-   //mousePressed();
-  // console.log(particle.x);
-  fill("white");
-  textSize(30);
-  text("500",15,525);
-  text("500",95,525);
-  text("500",175,525);
-
-  text("100",255,525);
-  text("100",335,525);
-  text("100",415,525);
-  text("100",495,525);
-  
-  text("200",575,525);
-  text("200",655,525);
-  text("200",735,525);
+  /* if(frameCount%60===0){
+    particles.push(new Particle(random(width/2-10,width/2+10),10,10));
+  }
+  for(var j = 0; j<particles.length;j++){
+    particles[j].display();
+  }*/
+  if(particleOb!=null){
+    particleOb.display();
+    if(particleOb.body.position.y>760&&particleOb.body.position.x>0&&particleOb.body.position.x<320){
+     score = score+500;
+     particleOb=null;
+     if(turn>=5) gameState = "end";
+    }
+  }
+  if(particleOb!=null){
+    particleOb.display();
+    if(particleOb.body.position.y>760&&particleOb.body.position.x>320&&particleOb.body.position.x<560){
+     score = score+100;
+     particleOb=null;
+     if(turn>=5) gameState = "end";
+    }
+  }
+  if(particleOb!=null){
+    particleOb.display();
+    if(particleOb.body.position.y>760&&particleOb.body.position.x>560&&particleOb.body.position.x<800){
+     score = score+200;
+     particleOb=null;
+     if(turn>=5) gameState = "end";
+    }
+  }
+ 
+  if(gameState === "end"){
+    textSize(46);
+    text("Game Over", 320, 360);
+  }
 }
-
 function mousePressed(){
-    
-    particle = new Particle(mouseX,5,10);
-    score1 = false;
+  if(gameState!=="end"){
+    particleOb=new Particle(mouseX,10,10);
+    turn = turn+1;
+  }
+  
+ 
 }
